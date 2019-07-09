@@ -1,3 +1,3 @@
-Scripts for figure generation are in the Figures folder, while scripts used for model building are in the Models folder.
+Scripts for figure generation and model building and are appropriately named.
 
-Note that all scripts require data tables that are store in the Data Tables folder.
+Two data files are included. One for for ISD, length, RSA, etc. values, as well as one for sequence data.
