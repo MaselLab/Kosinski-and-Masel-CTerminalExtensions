@@ -25,7 +25,7 @@ isd.data.weighted <- dplyr::group_by(ribo.isd, Grafting, Ribohits.factor) %>%
             ISD.N = length(ISD[!is.na(ISD)]),
             ISD.se = ISD.sd / sqrt(ISD.N))
 isd.data.weighted$Grafting <- c("Original", "Original", "Grafted", "Grafted")
-isd.data.weighted$Grafting <- factor(isd.data$Grafting, levels = c("Original", "Grafted"))
+isd.data.weighted$Grafting <- factor(isd.data.weighted$Grafting, levels = c("Original", "Grafted"))
 names(isd.data.weighted)[2] <- "Ribohits"
 
 # Making figure 3 part A.
