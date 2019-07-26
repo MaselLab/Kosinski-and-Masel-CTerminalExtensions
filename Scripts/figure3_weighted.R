@@ -29,7 +29,8 @@ isd.data.weighted$Grafting <- factor(isd.data.weighted$Grafting, levels = c("Ori
 names(isd.data.weighted)[2] <- "Ribohits"
 
 # Making figure 3 part A.
-png(filename = "Scripts/Figures/ISD_0_g_weighted_7-8-19.png", width = 400, height = 400)
+cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+png(filename = "Scripts/Figures/ISD_0_g_weighted_7-25-19.png", width = 400, height = 400)
 ggplot(data = isd.data.weighted,
        aes(x = Grafting,
            y = ISD.mean ^ 2,
@@ -40,6 +41,7 @@ ggplot(data = isd.data.weighted,
   xlab("") +
   ylab("ISD") +
   #scale_y_continuous(limits = c(0.075, 0.205)) +
+  scale_color_manual(values = cbPalette[c(2,4)]) +
   theme_bw(base_size = 28) +
   theme(legend.position = "none")
 dev.off()
@@ -53,7 +55,7 @@ isd.g.lm <- lm(data = ribohits.data[ribohits.data$Fragile == 0,],
                formula = ISD.grafted.sqrt ~ Ribohits.Binary + log(Length.0),
                weights = Length.0)
 
-png(filename = "Scripts/Figures/ISD0_Length0_ribo_7-8-19.png", height = 400, width = 400)
+png(filename = "Scripts/Figures/ISD0_Length0_ribo_7-25-19.png", height = 400, width = 400)
 ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
        aes(x = log(Length.0),
            y = sqrt(ISD.0.iupred2),
@@ -68,12 +70,12 @@ ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
                      labels = c(0.04, 0.16, 0.36),
                      limits = c(0.125, 0.62)) +
   theme_bw(base_size = 28) +
-  scale_color_manual(limits = c("Yes", "No"), values = c("#F8766D", "#00BFC4")) +
+  scale_color_manual(limits = c("Yes", "No"), values = cbPalette[c(2,4)]) +
   theme(legend.position = c(0.7775, 0.8325),
         legend.background = element_rect(fill = "white", size = 1, linetype = "solid", color = "black"))
 dev.off()
 
-png(filename = "Scripts/Figures/ISDg_Length0_ribo_7-8-19.png", height = 400, width = 400)
+png(filename = "Scripts/Figures/ISDg_Length0_ribo_7-25-19.png", height = 400, width = 400)
 ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
        aes(x = log(Length.0),
            y = ISD.grafted.sqrt,
@@ -88,6 +90,6 @@ ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
                      labels = c(0.04, 0.16, 0.36),
                      limits = c(0.125, 0.62)) +
   theme_bw(base_size = 28) +
-  scale_color_manual(limits = c("Yes", "No"), values = c("#F8766D", "#00BFC4")) +
+  scale_color_manual(limits = c("Yes", "No"), values = cbPalette[c(2,4)]) +
   theme(legend.position = "none")
 dev.off()
