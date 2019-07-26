@@ -66,7 +66,8 @@ in.frame.vs.m2.ext <-
          var.equal = T)
 in.frame.vs.m2.ext$p.value
 
-# Showing that in-frame extensions are shorter for fragile proteins.
+# Showing that in-frame extensions are shorter for non-fragile and fragile proteins.
+# Non-fragile.
 ext.0.m1.nofragile <- 
   with(ribohits.data[ribohits.data$Fragile == 0,],
        t.test(log(Length.0), log(Length.m1), var.equal = T))
@@ -75,6 +76,15 @@ ext.0.m2.nofragile <-
        t.test(log(Length.0), log(Length.m2), var.equal = T))
 ext.0.m1.nofragile$p.value
 ext.0.m2.nofragile$p.value
+# Fragile.
+ext.0.m1.fragile <- 
+  with(ribohits.data[ribohits.data$Fragile == 1,],
+       t.test(log(Length.0), log(Length.m1), var.equal = T))
+ext.0.m2.fragile <- 
+  with(ribohits.data[ribohits.data$Fragile == 1,],
+       t.test(log(Length.0), log(Length.m2), var.equal = T))
+ext.0.m1.fragile$p.value
+ext.0.m2.fragile$p.value
 
 # Are C-termini of genes with detectable ribohits more disordered than genes without detectable ribohits?
 ribo.vs.isd.last10 <-
