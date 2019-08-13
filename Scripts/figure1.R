@@ -1,7 +1,7 @@
 # Figure 1 script.
 
 # Load ribohits data.
-ribohits.data <- read.table("Data/ribohits_data_7-8-19.tsv", header = T, sep = "\t", stringsAsFactors = F)
+ribohits.data <- read.table("Data/ribohits_data_tai_8-12-19.tsv", header = T, sep = "\t", stringsAsFactors = F)
 
 # Load packages.
 library(tidyverse)
@@ -18,16 +18,20 @@ fragile.data <- group_by(ribohits.frame, Fragile, Frame) %>%
             UTR.se = UTR.sd / sqrt(UTR.N),
             Length.mean = mean(log(Length), na.rm = T),
             Length.sd = sd(log(Length), na.rm = T),
-            Length.N = length(log(Length)),
+            Length.N = sum(!is.na(Length)),
             Length.se = Length.sd / sqrt(Length.N),
             ISD.Last10.mean = mean(sqrt(ISD.Last10.iupred2), na.rm = T),
             ISD.Last10.sd = sd(sqrt(ISD.Last10.iupred2), na.rm = T),
             ISD.Last10.N = length(sqrt(ISD.Last10.iupred2)),
-            ISD.Last10.se = ISD.Last10.sd / sqrt(ISD.Last10.N))
+            ISD.Last10.se = ISD.Last10.sd / sqrt(ISD.Last10.N),
+            tAI.mean = mean(tai.4.log, na.rm = T),
+            tAI.sd = sd(tai.4.log, na.rm = T),
+            tAI.N = sum(!is.na(tai.4.log)),
+            tAI.se = tAI.sd / sqrt(tAI.N))
 fragile.data$Frame <- factor(fragile.data$Frame)
 
 # Plotting figures.
-png(filename = "Scripts/Figures/Fragile_UTRLength_7-8-19.png", width = 350, height = 400)
+png(filename = "Scripts/Figures/Fragile_UTRLength_8-12-19.png", width = 350, height = 400)
 ggplot(data = fragile.data,
        aes(x = factor(Fragile),
            y = exp(UTR.mean))) +
@@ -40,7 +44,7 @@ ggplot(data = fragile.data,
   theme_bw(base_size = 28)
 dev.off()
 
-png(filename = "Scripts/Figures/Fragile_ExtL_7-8-19.png", width = 400, height = 400)
+png(filename = "Scripts/Figures/Fragile_ExtL_8-12-19.png", width = 400, height = 400)
 ggplot(data = fragile.data,
        aes(x = factor(Fragile),
            y = exp(Length.mean),
@@ -58,7 +62,7 @@ ggplot(data = fragile.data,
         legend.spacing.y = unit(0.25, 'cm'), legend.key.size = unit(1.0, "cm"))
 dev.off()
 
-png(filename = "Scripts/Figures/Fragile_ISDLast10_7-8-19.png", width = 350, height = 400)
+png(filename = "Scripts/Figures/Fragile_ISDLast10_8-12-19.png", width = 350, height = 400)
 ggplot(data = fragile.data,
        aes(x = factor(Fragile),
            y = ISD.Last10.mean ^ 2)) +
@@ -69,5 +73,21 @@ ggplot(data = fragile.data,
   scale_y_continuous(limits = c(0.22, 0.29)) +
   xlab("") +
   ylab("C-terminal ISD") +
+  theme_bw(base_size = 28)
+dev.off()
+
+png(filename = "Scripts/Figures/Fragile_tAI4log_8-12-19.png", height = 400, width = 425)
+ggplot(fragile.data[fragile.data$Frame == "In-frame",],
+       aes(
+         x = factor(Fragile),
+         y = exp(tAI.mean)
+       )) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = exp(tAI.mean - tAI.se), ymax = exp(tAI.mean + tAI.se)),
+                width = 0.4, size = 2) +
+  ylab("tAI") +
+  xlab("") +
+  scale_y_continuous(limits = c(0.278, 0.312)) +
+  scale_x_discrete(labels = c("Not fragile", "Fragile")) +
   theme_bw(base_size = 28)
 dev.off()
