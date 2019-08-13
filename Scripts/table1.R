@@ -1,7 +1,7 @@
 # Table 1 script and other non-model tests.
 
 # Load ribohits data.
-ribohits.data <- read.table("Data/ribohits_data_7-8-19.tsv", header = T, sep = "\t", stringsAsFactors = F)
+ribohits.data <- read.table("Data/ribohits_data_tai_8-12-19.tsv", header = T, sep = "\t", stringsAsFactors = F)
 
 # Generate table.
 fragile.ribo <- table(ribohits.data[, c("Ribohits.Binary", "Fragile")])
@@ -92,3 +92,9 @@ ribo.vs.isd.last10 <-
          sqrt(ribohits.data[ribohits.data$Ribohits.Binary == 0 & ribohits.data$Fragile == 0,]$ISD.Last10.iupred2),
          var.equal = T)
 ribo.vs.isd.last10
+
+# Is geometric mean tAI (for the first 4 codon positions in in-frame extensions) higher in non-fragile than
+# in fragile genes?
+t.test(ribohits.data[ribohits.data$Fragile == 0,]$tai.4.log,
+       ribohits.data[ribohits.data$Fragile == 1,]$tai.4.log,
+       var.equal = T)
