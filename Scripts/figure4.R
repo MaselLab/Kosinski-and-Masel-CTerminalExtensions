@@ -1,7 +1,7 @@
 # Figure 4 code.
 
 # Load ribohits data.
-ribohits.data <- read.table("Data/ribohits_data_7-8-19.tsv", header = T, sep = "\t", stringsAsFactors = F)
+ribohits.data <- read.table("Data/ribohits_data_tai_8-12-19.tsv", header = T, sep = "\t", stringsAsFactors = F)
 
 # Load packages.
 library(tidyverse)
