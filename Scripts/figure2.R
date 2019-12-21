@@ -1,7 +1,7 @@
-# Figure 2.
+# Figure 3.
 
 # Load ribohits data.
-ribohits.data <- read.table("Data/ribohits_data_tai_8-12-19.tsv", header = T, sep = "\t", stringsAsFactors = F)
+ribohits.data <- read.table("Data/ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
 
 # Load packages.
 library(tidyverse)
@@ -16,6 +16,7 @@ for (i in 1:length(seq.data$Gene)) {
 }
 identical(seq.data$Gene, ribohits.data$Gene)
 ribohits.data$Length.ORF <- seq.data$Length.ORF
+ribohits.data$Length.0 <- ribohits.data$Length.0 - 1
 
 # Gather data into ISD groups.
 ribo.isd <- ribohits.data[ribohits.data$Fragile == 0,] %>%
@@ -57,16 +58,38 @@ isd.data <- isd.seqtype %>%
             ISD.N = length(ISD[!is.na(ISD)]),
             ISD.se = ISD.sd / sqrt(ISD.N))
 isd.data$SeqType <- factor(isd.data$SeqType, levels = c("ORF", "3' UTR", "Ext"))
+isd.seqtype$SeqType <- factor(isd.seqtype$SeqType, levels = c("ORF", "3' UTR", "Ext"))
 
-# Making figure 2 part A.
-png(filename = "Scripts/Figures/ISD_ORF_UTR_Ext_7-8-19.png", height = 400, width = 400)
+# Making figure 2 part A with means and standard errors.
+png(filename = "Scripts/Figures/ISD_ORF_UTR_Ext_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(data = isd.data,
        aes(x = SeqType,
-       y = ISD.mean ^ 2)) +
+           y = ISD.mean ^ 2)) +
   geom_point(size = 4) +
   geom_errorbar(aes(ymin = (ISD.mean - ISD.se)^2, ymax = (ISD.mean + ISD.se)^2), width = 0.4, size = 2) +
   scale_x_discrete(breaks = c("ORF", "3' UTR", "Ext"),
                    labels = c("ORF", "3' UTR", "Ext")) +
+  xlab("") +
+  ylab("ISD") +
+  theme_bw(base_size = 28)
+dev.off()
+
+# Making figure 2 part A with boxplot.
+boxplot.quantiles <- function(x){
+  qntls <- quantile(x, probs = c(0.09, 0.25, 0.5, 0.75, 0.91))
+  names(qntls) <- c("ymin", "lower", "middle", "upper", "ymax")
+  return(qntls)
+}
+
+png(filename = "Scripts/Figures/ISD_ORF_UTR_Ext_boxplot_12-18-19.png", height = 400, width = 400)
+ggplot(data = isd.seqtype,
+       aes(x = SeqType,
+           y = sqrt(ISD))) +
+  stat_summary(fun.data = boxplot.quantiles, geom = "boxplot") +
+  scale_x_discrete(breaks = c("ORF", "3' UTR", "Ext"),
+                   labels = c("ORF", "3' UTR", "Ext")) +
+  scale_y_continuous(breaks = sqrt(c(0.05, 0.15, 0.30, 0.5)),
+                     labels = c("0.05", "0.15", "0.30", "0.50")) +
   xlab("") +
   ylab("ISD") +
   theme_bw(base_size = 28)
@@ -87,7 +110,7 @@ abundance.last10.pred <-
                                                 "Length.0" = median(Length.0, na.rm = T))))
 ribo.nofragile$ab.fit <- abundance.last10.pred
 
-png(filename = "Scripts/Figures/Abundance_ISDLast10_7-8-19.png", width = 400, height = 400)
+png(filename = "Scripts/Figures/Abundance_ISDLast10_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(data = ribo.nofragile,
        aes(y = sqrt(ISD.Last10.iupred2),
            x = log(Abundance))) +
@@ -102,3 +125,6 @@ ggplot(data = ribo.nofragile,
   theme_bw(base_size = 28) +
   theme(legend.position = "none")
 dev.off()
+
+# Checking effect size.
+predict(abundance.lm, newdata = data.frame("Abundance" = quantile(ribo.nofragile$Abundance, na.rm = T))) ^ 2

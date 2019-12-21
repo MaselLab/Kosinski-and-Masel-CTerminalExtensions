@@ -1,7 +1,7 @@
 # Table 1 script and other non-model tests.
 
 # Load ribohits data.
-ribohits.data <- read.table("Data/ribohits_data_tai_8-12-19.tsv", header = T, sep = "\t", stringsAsFactors = F)
+ribohits.data <- read.table("Data/ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
 
 # Generate table.
 fragile.ribo <- table(ribohits.data[, c("Ribohits.Binary", "Fragile")])
@@ -35,17 +35,17 @@ in.frame.fragile <-
          var.equal = T)
 in.frame.fragile
 
-m1.fragile <-
-  t.test(log(ribohits.data[ribohits.data$Fragile == 1,]$Length.m1),
-         log(ribohits.data[ribohits.data$Fragile == 0,]$Length.m1),
+p1.fragile <-
+  t.test(log(ribohits.data[ribohits.data$Fragile == 1,]$Length.p1),
+         log(ribohits.data[ribohits.data$Fragile == 0,]$Length.p1),
          var.equal = T)
-m1.fragile
+p1.fragile
 
-m2.fragile <-
-  t.test(log(ribohits.data[ribohits.data$Fragile == 1,]$Length.m2),
-         log(ribohits.data[ribohits.data$Fragile == 0,]$Length.m2),
+p2.fragile <-
+  t.test(log(ribohits.data[ribohits.data$Fragile == 1,]$Length.p2),
+         log(ribohits.data[ribohits.data$Fragile == 0,]$Length.p2),
          var.equal = T)
-m2.fragile
+p2.fragile
 
 cterm.isd.fragile <-
   t.test(sqrt(ribohits.data[ribohits.data$Fragile == 1,]$ISD.Last10.iupred2),
@@ -54,42 +54,42 @@ cterm.isd.fragile <-
 cterm.isd.fragile
 
 # Showing that in-frame extensions are shorter.
-in.frame.vs.m1.ext <-
+in.frame.vs.p2.ext <-
   t.test(log(ribohits.data$Length.0),
-         log(ribohits.data$Length.m1),
+         log(ribohits.data$Length.p2),
          var.equal = T)
-in.frame.vs.m1.ext$p.value
+in.frame.vs.p2.ext$p.value
 
-in.frame.vs.m2.ext <-
+in.frame.vs.p1.ext <-
   t.test(log(ribohits.data$Length.0),
-         log(ribohits.data$Length.m2),
+         log(ribohits.data$Length.p1),
          var.equal = T)
-in.frame.vs.m2.ext$p.value
+in.frame.vs.p1.ext$p.value
 
-# Showing that in-frame extensions are shorter for non-fragile and fragile proteins.
+# Showing that in-frame extensions are shorter for non-fragile but not fragile proteins.
 # Non-fragile.
-ext.0.m1.nofragile <- 
+ext.0.p2.nofragile <- 
   with(ribohits.data[ribohits.data$Fragile == 0,],
-       t.test(log(Length.0), log(Length.m1), var.equal = T))
-ext.0.m2.nofragile <- 
+       t.test(log(Length.0), log(Length.p2), var.equal = T))
+ext.0.p1.nofragile <- 
   with(ribohits.data[ribohits.data$Fragile == 0,],
-       t.test(log(Length.0), log(Length.m2), var.equal = T))
-ext.0.m1.nofragile$p.value
-ext.0.m2.nofragile$p.value
+       t.test(log(Length.0), log(Length.p1), var.equal = T))
+ext.0.p2.nofragile$p.value
+ext.0.p1.nofragile$p.value
 # Fragile.
-ext.0.m1.fragile <- 
+ext.0.p2.fragile <- 
   with(ribohits.data[ribohits.data$Fragile == 1,],
-       t.test(log(Length.0), log(Length.m1), var.equal = T))
-ext.0.m2.fragile <- 
+       t.test(log(Length.0), log(Length.p2), var.equal = T))
+ext.0.p1.fragile <- 
   with(ribohits.data[ribohits.data$Fragile == 1,],
-       t.test(log(Length.0), log(Length.m2), var.equal = T))
-ext.0.m1.fragile$p.value
-ext.0.m2.fragile$p.value
+       t.test(log(Length.0), log(Length.p1), var.equal = T))
+ext.0.p2.fragile$p.value
+ext.0.p1.fragile$p.value
 
-# Are C-termini of genes with detectable ribohits more disordered than genes without detectable ribohits?
+# Are C-termini of genes with backups in all three frames more disorder than those without?
 ribo.vs.isd.last10 <-
-  t.test(sqrt(ribohits.data[ribohits.data$Ribohits.Binary == 1 & ribohits.data$Fragile == 0,]$ISD.Last10.iupred2),
-         sqrt(ribohits.data[ribohits.data$Ribohits.Binary == 0 & ribohits.data$Fragile == 0,]$ISD.Last10.iupred2),
+  t.test(sqrt(ribohits.data[ribohits.data$Fragile == 1,]$ISD.Last10.iupred2),
+         sqrt(ribohits.data[ribohits.data$Fragile == 0,]$ISD.Last10.iupred2),
          var.equal = T)
 ribo.vs.isd.last10
 
