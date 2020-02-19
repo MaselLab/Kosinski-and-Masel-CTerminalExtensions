@@ -1,7 +1,7 @@
 # Figure 5 code.
 
 # Load ribohits data.
-ribohits.data <- read.table("Data/ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
+ribohits.data <- read.table("ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
 
 # Load packages.
 library(tidyverse)
@@ -21,15 +21,15 @@ ribo.isd <-
 
 isd.data.weighted <- dplyr::group_by(ribo.isd, Grafting, Ribohits.factor) %>%
   dplyr::summarise(ISD.mean = wtd.mean(ISD, weights = Length.0, na.rm = T),
-            ISD.sd = sqrt(wtd.var(ISD, weights = Length.0, na.rm = T)),
-            ISD.N = length(ISD[!is.na(ISD)]),
-            ISD.se = ISD.sd / sqrt(ISD.N))
+                   ISD.sd = sqrt(wtd.var(ISD, weights = Length.0, na.rm = T)),
+                   ISD.N = length(ISD[!is.na(ISD)]),
+                   ISD.se = ISD.sd / sqrt(ISD.N))
 isd.data.weighted$Grafting <- c("Original", "Original", "Grafted", "Grafted")
 isd.data.weighted$Grafting <- factor(isd.data.weighted$Grafting, levels = c("Original", "Grafted"))
 names(isd.data.weighted)[2] <- "Ribohits"
 
 # Making figure 3 part A.
-cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 fig.5a.orig <- 
   ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
@@ -39,8 +39,8 @@ fig.5a.orig <-
              size = Length.0 - 1)
   ) +
   geom_point(alpha = 0.5) +
-  geom_smooth(method = "loess") +
-  geom_smooth(method = "lm", color = "red") +
+  geom_smooth(method = "loess", color = "#33CCFF", lwd = 1.1) +
+  geom_smooth(method = "lm", color = "#CC0000", lwd = 1.1) +
   xlab("Ribohits") +
   ylab("ISD") +
   scale_y_continuous(limits = c(0, 1),
@@ -52,22 +52,22 @@ fig.5a.orig <-
   theme(legend.position = "none")
 
 #ggExtra::ggMarginal(fig.5a.orig, type = "histogram")
-png(filename = "Scripts/Figures/ISD_0_weighted_loess_lm_1-23-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "ISD_0_weighted_loess_lm_2-18-20.png", width = 6, height = 6, units = "in", res = 350)
 fig.5a.orig
 dev.off()
 
 # Part A grafted.
-png(filename = "Scripts/Figures/ISD_g_weighted_loess_lm_1-23-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "ISD_g_weighted_loess_lm_2-18-20.png", width = 6, height = 6, units = "in", res = 350)
 fig.5a.grafted <-
   ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
-       aes(x = log10(Ribohits.summed + 0.5),
-           y = ISD.grafted.sqrt,
-           weight = Length.0 - 1,
-           size = Length.0 - 1)
-) +
+         aes(x = log10(Ribohits.summed + 0.5),
+             y = ISD.grafted.sqrt,
+             weight = Length.0 - 1,
+             size = Length.0 - 1)
+  ) +
   geom_point(alpha = 0.5) +
-  geom_smooth(method = "loess") +
-  geom_smooth(method = "lm", color = "red") +
+  geom_smooth(method = "loess", color = "#33CCFF", lwd = 1.1) +
+  geom_smooth(method = "lm", color = "#CC0000", lwd = 1.1) +
   xlab("Ribohits") +
   ylab("ISD") +
   scale_y_continuous(limits = c(0, 1),
@@ -99,12 +99,12 @@ fig.5a.orig.noweights <-
                      labels = c(0, 1, 10, 100, 1000)) +
   theme_bw(base_size = 28)
 
-png(filename = "Scripts/Figures/ISD_0_notweighted_loess_lm_1-22-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "ISD_0_notweighted_loess_lm_1-22-20.png", width = 6, height = 6, units = "in", res = 350)
 fig.5a.orig.noweights
 dev.off()
 
 # Part A grafted unweighted.
-png(filename = "Scripts/Figures/ISD_g_notweighted_loess_lm_1-22-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "ISD_g_notweighted_loess_lm_1-22-20.png", width = 6, height = 6, units = "in", res = 350)
 fig.5a.grafted.noweights <-
   ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
          aes(x = log10(Ribohits.summed + 0.5),
@@ -146,7 +146,7 @@ isd.g.lrt$`Pr(>Chi)`
 med.ribo <- log10(median(ribohits.data[ribohits.data$Fragile == 0,]$Ribohits.summed + 0.5, na.rm = T))
 no.ribo <- log10(0.5)
 
-png(filename = "Scripts/Figures/ISD0_Length0_ribo_12-8-19.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "ISD0_Length0_ribo_2-19-20.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
        aes(x = log10(Length.0),
            y = sqrt(ISD.0.iupred2),
@@ -163,12 +163,12 @@ ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
                      labels = c(0.04, 0.16, 0.36),
                      limits = c(0.12, 0.62)) +
   theme_bw(base_size = 28) +
-  scale_color_manual(limits = c("Yes", "No"), labels = c("Median", "None"), values = cbPalette[c(2,4)]) +
-  theme(legend.position = c(0.79, 0.8485),
+  scale_color_manual(limits = c("Yes", "No"), labels = c("Median", "None"), values = cbPalette[c(2,6)]) +
+  theme(legend.position = c(0.785, 0.835),
         legend.background = element_rect(fill = "white", size = 1, linetype = "solid", color = "black"))
 dev.off()
 
-png(filename = "Scripts/Figures/ISDg_Length0_ribo_12-8-19.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "ISDg_Length0_ribo_2-18-20.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
        aes(x = log10(Length.0),
            y = ISD.grafted.sqrt,
@@ -185,29 +185,29 @@ ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
                      labels = c(0.04, 0.16, 0.36),
                      limits = c(0.12, 0.62)) +
   theme_bw(base_size = 28) +
-  scale_color_manual(limits = c("Yes", "No"), labels = c("Median", "None"), values = cbPalette[c(2,4)]) +
+  scale_color_manual(limits = c("Yes", "No"), labels = c("Median", "None"), values = cbPalette[c(2,6)]) +
   theme(legend.position = "none")
 dev.off()
 
 # Unweighted and weighted regressions for R2, and pseudo-R2.
 isd.0.nolength.noweights.lm <- lm(data = ribohits.data[ribohits.data$Fragile == 0,],
-               formula = ISD.0.sqrt ~ log10(Ribohits.summed + 0.5))
+                                  formula = ISD.0.sqrt ~ log10(Ribohits.summed + 0.5))
 isd.0.nolength.noweights.lm.summary <- summary(isd.0.nolength.noweights.lm)
 isd.0.nolength.noweights.lm.summary
 
 isd.g.nolength.noweights.lm <- lm(data = ribohits.data[ribohits.data$Fragile == 0,],
-               formula = ISD.grafted.sqrt ~ log10(Ribohits.summed + 0.5))
+                                  formula = ISD.grafted.sqrt ~ log10(Ribohits.summed + 0.5))
 isd.g.nolength.noweights.summary <- summary(isd.g.nolength.noweights.lm)
 isd.g.nolength.noweights.summary
 
 isd.0.nolength.lm <- lm(data = ribohits.data[ribohits.data$Fragile == 0,],
-                                  formula = ISD.0.sqrt ~ log10(Ribohits.summed + 0.5),
+                        formula = ISD.0.sqrt ~ log10(Ribohits.summed + 0.5),
                         weights = Length.0 - 1)
 isd.0.nolength.lm.summary <- summary(isd.0.nolength.lm)
 isd.0.nolength.lm.summary
 
 isd.g.nolength.lm <- lm(data = ribohits.data[ribohits.data$Fragile == 0,],
-                                  formula = ISD.grafted.sqrt ~ log10(Ribohits.summed + 0.5),
+                        formula = ISD.grafted.sqrt ~ log10(Ribohits.summed + 0.5),
                         weights = Length.0 - 1)
 isd.g.nolength.summary <- summary(isd.g.nolength.lm)
 isd.g.nolength.summary
@@ -216,12 +216,12 @@ isd.0.summary
 isd.g.summary
 
 isd.0.noweights.lm <- lm(data = ribohits.data[ribohits.data$Fragile == 0,],
-                                  formula = ISD.0.sqrt ~ log10(Ribohits.summed + 0.5) + log10(Length.0))
+                         formula = ISD.0.sqrt ~ log10(Ribohits.summed + 0.5) + log10(Length.0))
 isd.0.noweights.lm.summary <- summary(isd.0.noweights.lm)
 isd.0.noweights.lm.summary
 
 isd.g.noweights.lm <- lm(data = ribohits.data[ribohits.data$Fragile == 0,],
-                                  formula = ISD.grafted.sqrt ~ log10(Ribohits.summed + 0.5) + log10(Length.0))
+                         formula = ISD.grafted.sqrt ~ log10(Ribohits.summed + 0.5) + log10(Length.0))
 isd.g.noweights.summary <- summary(isd.g.noweights.lm)
 isd.g.noweights.summary
 

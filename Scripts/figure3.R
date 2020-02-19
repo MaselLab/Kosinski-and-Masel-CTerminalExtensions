@@ -1,7 +1,7 @@
 # Figure 3 script.
 
 # Load ribohits data.
-ribohits.data <- read.table("Data/ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
+ribohits.data <- read.table("ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
 
 # Load packages.
 library(tidyverse)
@@ -34,7 +34,7 @@ fragile.data$Frame <- factor(fragile.data$Frame, levels = c("In-frame", "+1 shif
 
 # Plotting figures. Means and standard errors for each figure first, then with a boxplot.
 # Part A.
-png(filename = "Scripts/Figures/Fragile_UTRLength_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "Fragile_UTRLength_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(data = fragile.data,
        aes(x = factor(Fragile),
            y = exp(UTR.mean))) +
@@ -53,7 +53,7 @@ boxplot.quantiles <- function(x){
   names(qntls) <- c("ymin", "lower", "middle", "upper", "ymax")
   return(qntls)
 }
-png(filename = "Scripts/Figures/Fragile_UTRLength_boxplot_10-15-19.png", width = 400, height = 400)
+png(filename = "Fragile_UTRLength_boxplot_10-15-19.png", width = 400, height = 400)
 ggplot(data = ribohits.data,
        aes(x = factor(Fragile),
            y = log(Length.3UTR))) +
@@ -67,7 +67,8 @@ ggplot(data = ribohits.data,
 dev.off()
 
 # Part B
-png(filename = "Scripts/Figures/Fragile_ExtL_+1+2_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
+cb.pallette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+png(filename = "Fragile_ExtL_+1+2_2-18-20.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(data = fragile.data,
        aes(x = factor(Fragile),
            y = exp(Length.mean),
@@ -79,14 +80,14 @@ ggplot(data = fragile.data,
   ylab("Extension length (AAs)") +
   theme_bw(base_size = 28) +
   scale_color_manual(breaks = c("In-frame", "+1 shifted", "+2 shifted"),
-                     values = c("#E69F00", "#D55E00", "#009E73")) +
-  theme(legend.position = c(0.7575, 0.7895),
+                     values = c(cb.pallette[2], cb.pallette[4], cb.pallette[6])) +
+  theme(legend.position = c(0.7555, 0.7825),
         legend.background = element_rect(fill = "white", size = 1, linetype = "solid", color = "black"),
         legend.spacing.y = unit(0.25, 'cm'), legend.key.size = unit(1.0, "cm"))
 dev.off()
 
 # Part B with box plot.
-png(filename = "Scripts/Figures/Fragile_ExtL_boxplot_+1+2_10-27-19.png", width = 600, height = 400)
+png(filename = "Fragile_ExtL_boxplot_+1+2_10-27-19.png", width = 600, height = 400)
 ggplot(data = ribohits.frame[!is.na(ribohits.frame$Length),],
        aes(x = factor(Fragile),
            y = log(Length),
@@ -99,13 +100,13 @@ ggplot(data = ribohits.frame[!is.na(ribohits.frame$Length),],
                      labels = c(1, 2, 5, 10, 25)) +
   theme_bw(base_size = 28) +
   scale_fill_manual(breaks = c("In-frame", "+1 shifted", "+2 shifted"),
-                     values = c("#E69F00", "#D55E00", "#009E73")) +
+                    values = c("#E69F00", "#D55E00", "#009E73")) +
   theme(legend.background = element_rect(fill = "white", size = 1, linetype = "solid", color = "black"),
         legend.spacing.y = unit(0.25, 'cm'), legend.key.size = unit(1.0, "cm"))
 dev.off()
 
 # Part C
-png(filename = "Scripts/Figures/Fragile_ISDLast10_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "Fragile_ISDLast10_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(data = fragile.data,
        aes(x = factor(Fragile),
            y = ISD.Last10.mean ^ 2)) +
@@ -120,7 +121,7 @@ ggplot(data = fragile.data,
 dev.off()
 
 # Part C with boxplot
-png(filename = "Scripts/Figures/Fragile_ISDLast10_boxplot_10-15-19.png", width = 400, height = 400)
+png(filename = "Fragile_ISDLast10_boxplot_10-15-19.png", width = 400, height = 400)
 ggplot(data = ribohits.data,
        aes(x = factor(Fragile),
            y = sqrt(ISD.Last10.iupred2))) +
@@ -134,7 +135,7 @@ ggplot(data = ribohits.data,
 dev.off()
 
 # Part D
-png(filename = "Scripts/Figures/Fragile_tAI4log_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "Fragile_tAI4log_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(fragile.data[fragile.data$Frame == "In-frame",],
        aes(
          x = factor(Fragile),
@@ -151,7 +152,7 @@ ggplot(fragile.data[fragile.data$Frame == "In-frame",],
 dev.off()
 
 # Part D with boxplot.
-png(filename = "Scripts/Figures/Fragile_tAI4log_boxplot_10-15-19.png", height = 400, width = 425)
+png(filename = "Fragile_tAI4log_boxplot_10-15-19.png", height = 400, width = 425)
 ggplot(ribohits.data,
        aes(
          x = factor(Fragile),

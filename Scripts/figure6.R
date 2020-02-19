@@ -1,7 +1,7 @@
 # Figure 6 code.
 
 # Load ribohits data.
-ribohits.data <- read.table("Data/ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
+ribohits.data <- read.table("ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
 
 # Load packages.
 library(tidyverse)
@@ -83,14 +83,14 @@ rsa.noweights.summary
 # Part A.
 fig.6a.dprop <-
   ggplot(data = ribohits.nofragile,
-       aes(x = log10(Ribohits.summed + 0.5),
-           y = Disorder.prop.0,
-           weight = Length.0 - 1,
-           size = Length.0 - 1)
-) +
+         aes(x = log10(Ribohits.summed + 0.5),
+             y = Disorder.prop.0,
+             weight = Length.0 - 1,
+             size = Length.0 - 1)
+  ) +
   geom_point(alpha = 0.5) +
-  geom_smooth(method = "loess") +
-  geom_smooth(method = "lm", color = "red") +
+  geom_smooth(method = "loess", color = "#33CCFF", lwd = 1.1) +
+  geom_smooth(method = "lm", color = "#CC0000", lwd = 1.1) +
   xlab("Ribohits") +
   ylab("Disorder propensity") +
   #scale_y_continuous(breaks = sqrt(c(0, 0.1, 0.25, 0.5)),
@@ -99,21 +99,21 @@ fig.6a.dprop <-
                      labels = c(0, 1, 10, 100, 1000)) +
   theme_bw(base_size = 28) +
   theme(legend.position = "none")
-png(filename = "Scripts/Figures/Disprop_weighted_loess_lm_1-23-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "Disprop_weighted_loess_lm_2-18-20.png", width = 6, height = 6, units = "in", res = 350)
 #ggExtra::ggMarginal(fig.6a.dprop, type = "histogram")
 fig.6a.dprop
 dev.off()
 
 fig.6a.rsa <-
   ggplot(data = ribohits.nofragile,
-       aes(x = log10(Ribohits.summed + 0.5),
-           y = RSA.hydrophilicity.0,
-           weight = Length.0 - 1,
-           size = Length.0 - 1)
-) +
+         aes(x = log10(Ribohits.summed + 0.5),
+             y = RSA.hydrophilicity.0,
+             weight = Length.0 - 1,
+             size = Length.0 - 1)
+  ) +
   geom_point(alpha = 0.5) +
-  geom_smooth(method = "loess") +
-  geom_smooth(method = "lm", color = "red") +
+  geom_smooth(method = "loess", color = "#33CCFF", lwd = 1.1) +
+  geom_smooth(method = "lm", color = "#CC0000", lwd = 1.1) +
   xlab("Ribohits") +
   ylab("RSA") +
   #scale_y_continuous(breaks = sqrt(c(0, 0.1, 0.25, 0.5)),
@@ -122,7 +122,7 @@ fig.6a.rsa <-
                      labels = c(0, 1, 10, 100, 1000)) +
   theme_bw(base_size = 28) +
   theme(legend.position = "none")
-png(filename = "Scripts/Figures/RSA_weighted_loess_lm_1-23-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "RSA_weighted_loess_lm_2-18-20.png", width = 6, height = 6, units = "in", res = 350)
 #ggExtra::ggMarginal(fig.6a.rsa, type = "histogram")
 fig.6a.rsa
 dev.off()
@@ -143,7 +143,7 @@ fig.6a.unweighted.dprop <-
   scale_x_continuous(breaks = log10(c(0.5, 1.5, 10.5, 100.5, 1000.5)),
                      labels = c(0, 1, 10, 100, 1000)) +
   theme_bw(base_size = 28)
-png(filename = "Scripts/Figures/Disprop_unweighted_loess_lm_1-23-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "Disprop_unweighted_loess_lm_2-18-20.png", width = 6, height = 6, units = "in", res = 350)
 #ggExtra::ggMarginal(fig.6a.dprop, type = "histogram")
 fig.6a.unweighted.dprop
 dev.off()
@@ -163,7 +163,7 @@ fig.6a.unweighted.rsa <-
   scale_x_continuous(breaks = log10(c(0.5, 1.5, 10.5, 100.5, 1000.5)),
                      labels = c(0, 1, 10, 100, 1000)) +
   theme_bw(base_size = 28)
-png(filename = "Scripts/Figures/RSA_unweighted_loess_lm_1-23-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "RSA_unweighted_loess_lm_2-18-20.png", width = 6, height = 6, units = "in", res = 350)
 #ggExtra::ggMarginal(fig.6a.rsa, type = "histogram")
 fig.6a.unweighted.rsa
 dev.off()
@@ -171,7 +171,7 @@ dev.off()
 # Part B
 cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
-png(filename = "Scripts/Figures/DisProp_L0_ribo_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "DisProp_L0_ribo_2-19-20.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
        aes(x = log10(Length.0),
            y = Disorder.prop.0,
@@ -188,11 +188,11 @@ ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
   #                   labels = c(0.04, 0.16, 0.36),
   #                   limits = c(0.125, 0.725)) +
   theme_bw(base_size = 28) +
-  scale_color_manual(limits = c("Yes", "No"), values = cbPalette[c(2,4)]) +
+  scale_color_manual(limits = c("Yes", "No"), values = cbPalette[c(2,6)]) +
   theme(legend.position = "none")
 dev.off()
 
-png(filename = "Scripts/Figures/Hydrophilic_L0_ribo_12-18-19.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "Hydrophilic_L0_ribo_2-19-20.png", width = 6, height = 6, units = "in", res = 350)
 ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
        aes(x = log10(Length.0),
            y = RSA.hydrophilicity.0,
@@ -209,7 +209,7 @@ ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
   #                   labels = c(0.04, 0.16, 0.36),
   #                   limits = c(0.125, 0.725)) +
   theme_bw(base_size = 28) +
-  scale_color_manual(limits = c("Yes", "No"), labels = c("Median", "Zero"), values = cbPalette[c(2,4)]) +
-  theme(legend.position = c(0.79, 0.849),
+  scale_color_manual(limits = c("Yes", "No"), labels = c("Median", "Zero"), values = cbPalette[c(2,6)]) +
+  theme(legend.position = c(0.785, 0.835),
         legend.background = element_rect(fill = "white", size = 1, linetype = "solid", color = "black"))
 dev.off()

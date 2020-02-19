@@ -1,16 +1,19 @@
 # New Figure 2 (histogram)
 
 # Load ribohits data.
-ribohits.data <- read.table("Data/ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
+ribohits.data <- read.table("ribohits_data_11-13-19.tab", header = T, sep = "\t", stringsAsFactors = F)
 
 # Load packages.
 library(tidyverse)
 
 # Global variables.
-today.date <- "1-24-20"
+today.date <- "2-18-20"
+
+# Loading color blind palette.
+cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 # Histogram of 3' UTR ribohits coverage.
-histogram.ribo.filename <- paste("Scripts/Figures/histogram_ribohits_", today.date, ".png", sep = "")
+histogram.ribo.filename <- paste("histogram_ribohits_", today.date, ".png", sep = "")
 png(histogram.ribo.filename, width = 15, height = 7, units = "in", res = 350)
 ggplot(
   data = ribohits.data,
@@ -29,5 +32,5 @@ ggplot(
   theme_bw(base_size = 28) +
   theme(legend.position = c(0.75, 0.8),
         legend.background = element_rect(fill = "white", size = 1, linetype = "solid", color = "black")) +
-  scale_fill_discrete(name = "Fully\nbacked up", labels = c("Yes", "No"))
+  scale_fill_manual(name = "Fully\nbacked up", labels = c("Yes", "No"), values = cbPalette[c(2,6)])
 dev.off()
