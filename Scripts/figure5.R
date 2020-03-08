@@ -146,7 +146,7 @@ isd.g.lrt$`Pr(>Chi)`
 med.ribo <- log10(median(ribohits.data[ribohits.data$Fragile == 0,]$Ribohits.summed + 0.5, na.rm = T))
 no.ribo <- log10(0.5)
 
-png(filename = "ISD0_Length0_ribo_2-19-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "ISD0_Length0_ribo_3-8-2020.png", width = 6, height = 5, units = "in", res = 350)
 ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
        aes(x = log10(Length.0),
            y = sqrt(ISD.0.iupred2),
@@ -164,11 +164,11 @@ ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
                      limits = c(0.12, 0.62)) +
   theme_bw(base_size = 28) +
   scale_color_manual(limits = c("Yes", "No"), labels = c("Median", "None"), values = cbPalette[c(2,6)]) +
-  theme(legend.position = c(0.785, 0.835),
+  theme(legend.position = c(0.785, 0.789),
         legend.background = element_rect(fill = "white", size = 1, linetype = "solid", color = "black"))
 dev.off()
 
-png(filename = "ISDg_Length0_ribo_2-18-20.png", width = 6, height = 6, units = "in", res = 350)
+png(filename = "ISDg_Length0_ribo_3-8-2020.png", width = 6, height = 5, units = "in", res = 350)
 ggplot(data = ribohits.data[ribohits.data$Fragile == 0,],
        aes(x = log10(Length.0),
            y = ISD.grafted.sqrt,
